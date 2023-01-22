@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, GDIPOBJ, GDIPAPI, Jpeg;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, GDIPOBJ, GDIPAPI;
 
 type
   TForm1 = class(TForm)
@@ -14,7 +14,7 @@ type
     procedure Image1Click(Sender: TObject);
   private
     FGPBitmap: array[1..2] of TGPBitmap;
-    procedure Image1Paint(Counter: Integer);
+    procedure Image1Paint(Count: Integer);
   public
     { Public 宣言 }
   end;
@@ -56,7 +56,7 @@ begin
   FGPBitmap[2] := swap;
 end;
 
-procedure TForm1.Image1Paint(Counter: Integer);
+procedure TForm1.Image1Paint(Count: Integer);
 var
   gcanvas: TGPGraphics;
   cm: TColorMatrix;
@@ -66,14 +66,12 @@ begin
   var h := FGPBitmap[1].GetHeight;
 
   ia := TGPImageAttributes.Create;
-
   gcanvas := TGPGraphics.Create(Image1.Canvas.Handle);
 
   fillChar(cm,SizeOf(TColorMatrix),#0);
   for var i := 0 to 4 do cm[i,i] := 1.0;
 
-  cm[3,3] := Counter / TIMES;
-
+  cm[3,3] := Count / TIMES;
   ia.SetColorMatrix(cm);
   gcanvas.DrawImage(FGPBitmap[1],
                     MakeRect(0, 0, w, h),
