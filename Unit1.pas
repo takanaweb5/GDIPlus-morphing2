@@ -57,6 +57,13 @@ begin
 end;
 
 procedure TForm1.Image1Paint(Count: Integer);
+const
+  CM_DEFAULT : TColorMatrix = (
+      (1, 0, 0, 0, 0),
+      (0, 1, 0, 0, 0),
+      (0, 0, 1, 0, 0),
+      (0, 0, 0, 9, 0),
+      (0, 0, 0, 0, 1));
 var
   gcanvas: TGPGraphics;
   cm: TColorMatrix;
@@ -68,8 +75,7 @@ begin
   ia := TGPImageAttributes.Create;
   gcanvas := TGPGraphics.Create(Image1.Canvas.Handle);
 
-  fillChar(cm,SizeOf(TColorMatrix),#0);
-  for var i := 0 to 4 do cm[i,i] := 1.0;
+  cm := CM_DEFAULT;
 
   cm[3,3] := Count / TIMES;
   ia.SetColorMatrix(cm);
@@ -80,7 +86,7 @@ begin
                     UnitPixel,
                     ia);
 
-  cm[3,3] := 1.0 - cm[3,3];
+  cm[3,3] := 1 - cm[3,3];
   ia.SetColorMatrix(cm);
   gcanvas.DrawImage(FGPBitmap[2],
                     MakeRect(0, 0, w, h),
