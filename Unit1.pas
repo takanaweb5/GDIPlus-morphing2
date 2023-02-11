@@ -20,7 +20,7 @@ type
 
 const
   FILE1 = 'z:\file2.jpg';
-  WAITTIME = 20; //1回ごとのウェイトタイム（ミリ秒）
+  WAITTIME = 10; //1回ごとのウェイトタイム（ミリ秒）
   TIMES = 100;   //変身までに何回描画するか
 
 var
@@ -55,33 +55,28 @@ var
 begin
 
   FGPBitmap[1] := TGPBitmap.Create(FILE1);
-  FGPBitmap[2] := TGPBitmap.Create(FILE1);
-
   var w := FGPBitmap[1].GetWidth;
   var h := FGPBitmap[1].GetHeight;
+//  FGPBitmap[2] := TGPBitmap.Create(w,h,FGPBitmap[1].GetPixelFormat);
+  FGPBitmap[2] := TGPBitmap.Create(w,h,PixelFormat32bppARGB);
+
   ia := TGPImageAttributes.Create;
   cm := CM_DEFAULT;
 
   ia.SetColorMatrix(cm);
   gcanvas := TGPGraphics.Create(FGPBitmap[2]);
-  gcanvas.DrawImage(FGPBitmap[1],
-                    MakeRect(0, 0, w, h),
-                    0, 0,
-                    w, h,
-                    UnitPixel,
-                    ia);
+  gcanvas.DrawImage(FGPBitmap[1], MakeRect(0, 0, w, h),
+                                           0, 0, w, h,
+                                  UnitPixel, ia);
 
   if FFlg then ia.SetThreshold(1- Count/TIMES)
           else ia.SetThreshold(Count/TIMES);
 
   FreeAndNil(gcanvas);
   gcanvas := TGPGraphics.Create(Image1.Canvas.Handle);
-  gcanvas.DrawImage(FGPBitmap[2],
-                    MakeRect(0, 0, w, h),
-                    0, 0,
-                    w, h,
-                    UnitPixel,
-                    ia);
+  gcanvas.DrawImage(FGPBitmap[2], MakeRect(0, 0, w, h),
+                                           0, 0, w, h,
+                                  UnitPixel, ia);
 
 
   FreeAndNil(gcanvas);
